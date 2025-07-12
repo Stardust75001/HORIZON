@@ -1,0 +1,25 @@
+name: Sync Shopify to GitHub
+
+on:
+  theme:
+    store: thepetsociety.paris
+    branch: main
+    events:
+      - push
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout GitHub repository
+        uses: actions/checkout@v2
+
+      - name: Push changes from Shopify to GitHub
+        uses: Inuxco/themeflow-shopify-sync@v1
+        with:
+          direction: shopify_to_git
+          store: thepetsociety.paris
+          theme_id: live
+          branch: main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
