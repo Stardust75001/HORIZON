@@ -1,25 +1,21 @@
 name: Sync Shopify to GitHub
 
 on:
-  theme:
-    store: thepetsociety.paris
-    branch: main
-    events:
-      - push
+  push:
+    branches:
+      - main
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout GitHub repository
-        uses: actions/checkout@v2
+      - name: Checkout Git repository
+        uses: actions/checkout@v3
 
-      - name: Push changes from Shopify to GitHub
-        uses: Inuxco/themeflow-shopify-sync@v1
-        with:
-          direction: shopify_to_git
-          store: thepetsociety.paris
-          theme_id: live
-          branch: main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit Shopify theme files
+        run: |
+          git config user.name "shopify[bot]"
+          git config user.email "bot@shopify.com"
+          git add .
+          git commit -m "Sync from Shopify to GitHub" || echo "No changes"
+          git push origin main
